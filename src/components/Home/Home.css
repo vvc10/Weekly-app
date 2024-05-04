@@ -1,0 +1,36 @@
+*{
+    font-family: "Lexend", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-weight: 400;
+}
+.search-bar{
+    margin: 2rem 2rem;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+.grouped-demo{
+    width: 100%;
+    font-family: "Lexend", sans-serif;
+    min-width: fit-content;
+
+}
+.job-list {
+    padding: 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* 3 cards per row */
+    gap: 20px; /* Gap between cards */
+  }
+  
+  @media (max-width: 1024px) {
+    .job-list {
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Adjust for smaller screens */
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .job-list {
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Adjust for smaller screens */
+    }
+  }
