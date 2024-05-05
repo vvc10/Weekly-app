@@ -21,10 +21,8 @@ const Home = () => {
     minBasePay: ''
   });
   const observer = useRef(); // Ref for IntersectionObserver
-
   const lastJobCardRef = useRef(); // Ref for last job card
 
-  // Fetch jobs from API
   useEffect(() => {
     const fetchJobs = async () => {
       setLoading(true);
@@ -56,9 +54,14 @@ const Home = () => {
           throw new Error('Data format is not correct');
         }
 
-        setJobs(prevJobs => [...prevJobs, ...data.jdList]);
-        setLoading(false);
-        setHasMore(data.jdList.length > 0);
+        // If no data is returned or if we've reached the end of the data, set hasMore to false
+        if (data.jdList.length === 0) {
+          setHasMore(false);
+        } else {
+          setJobs(prevJobs => [...prevJobs, ...data.jdList]);
+          setLoading(false);
+          setHasMore(true);
+        }
       } catch (error) {
         console.error(error);
         setLoading(false);
@@ -68,7 +71,6 @@ const Home = () => {
     fetchJobs();
   }, [page]);
 
-  // Intersection observer for infinite scrolling
   useEffect(() => {
     const options = {
       root: null,
@@ -89,7 +91,6 @@ const Home = () => {
     return () => observer.current.disconnect(); // Cleanup observer
   }, [hasMore, loading]);
 
-  // Handle filter change
   const handleFilterChange = (filterName, value) => {
     const filteredValue = value === null ? '' : value;
 
@@ -99,7 +100,6 @@ const Home = () => {
     }));
   };
 
-  // Apply filters to jobs
   const applyFilters = (job) => {
     const { minExperience, companyName, location, remote, techStack, role, minBasePay } = filters;
 
@@ -114,12 +114,12 @@ const Home = () => {
     );
   };
 
-  // Filter jobs based on applied filters
   const filteredJobs = jobs.filter(job => applyFilters(job));
 
   return (
     <div className='home'>
       <div className='filters search-bar'>
+        {/* Autocomplete components */}
         {/* Autocomplete for job role */}
         <Autocomplete
           id="role"
@@ -242,7 +242,7 @@ const Home = () => {
             </div>
           ))}
           {/* Display no jobs component if no jobs found */}
-          {!loading && !hasMore && <NullJobs/>}
+          {!loading && filteredJobs.length === 0 && <NullJobs />}
           {/* Display loader while loading */}
           {loading && <Loader />}
         </div>
