@@ -14,8 +14,10 @@ const JobCard = ({
     minJdSalary,
     salaryCurrencyCode
 }) => {
+    // State for modal open/close
     const [modalOpen, setModalOpen] = useState(false);
 
+    // Function to render salary information
     const renderSalary = () => {
         if (minJdSalary !== null && maxJdSalary !== null) {
             if (minJdSalary === maxJdSalary) {
@@ -32,14 +34,17 @@ const JobCard = ({
         }
     };
 
+    // Function to render location
     const renderLocation = () => {
         return location !== null ? location : '';
     };
 
+    // Function to render job details
     const renderJobDetails = () => {
         return jobDetailsFromCompany ? jobDetailsFromCompany : 'Job Details not provided';
     };
 
+    // Function to render experience
     const renderExperience = () => {
         if (minExp !== null) {
             return `${minExp}`;
@@ -50,21 +55,26 @@ const JobCard = ({
         }
     };
 
+    // Function to open modal
     const openModal = () => {
         setModalOpen(true);
     };
 
+    // Function to close modal
     const closeModal = () => {
         setModalOpen(false);
     };
 
     return (
         <div className='job-card'>
+            {/* Job posting details */}
             <div className='job-card-head'>
                 <span>⏳ Posted 19 days ago</span>
             </div>
+            {/* Main job card section */}
             <div className='job-card-main-sec'>
                 <div className='job-card-main-sec-head'>
+                    {/* Company logo and details */}
                     <img src={logoUrl} alt={companyName} />
                     <div className='jcmshinhead'>
                         <h2>{companyName}</h2>
@@ -72,9 +82,11 @@ const JobCard = ({
                         <p className='head-jobloc'>{renderLocation()}</p>
                     </div>
                 </div>
+                {/* Estimated salary */}
                 <div className='job-card-estd'>
                     <p>Estimated Salary: {renderSalary()} ✅</p>
                 </div>
+                {/* About Company section */}
                 <div className='job-card-about-company'>
                     <label>About Company</label>
                     <p>{renderJobDetails().split(' ').slice(0, 80).join(' ')}..</p>
@@ -82,10 +94,12 @@ const JobCard = ({
                         View more
                     </button>
                 </div>
+                {/* Minimum Experience */}
                 <p className='job-card-exp-sal'>Minimum Experience <br />
                     <span>{renderExperience()} years</span>
                 </p>
             </div>
+            {/* Job details */}
             <div className='job-details'>
                 <a href={jdLink} target='_blank' rel='noopener noreferrer'>
                     <button className='job-details-apply-btn'>
@@ -98,13 +112,13 @@ const JobCard = ({
                     </button>
                 </a>
             </div>
+            {/* Modal for detailed job description */}
             {modalOpen && (
                 <div className='modal-overlay' onClick={closeModal}>
                     <div className='modal' onClick={(e) => e.stopPropagation()}>
                         <div className='modal-head'>              
-                                  <label>Job Description</label>
+                            <label>Job Description</label>
                             <span className='close' onClick={closeModal}>&times;</span>
-
                         </div>
                         <div className='modal-content'>
                             <span>About Company:</span>

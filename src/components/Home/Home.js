@@ -24,6 +24,7 @@ const Home = () => {
 
   const lastJobCardRef = useRef();
 
+  // Fetch initial jobs data
   useEffect(() => {
     const fetchJobs = async () => {
       const myHeaders = new Headers();
@@ -65,6 +66,7 @@ const Home = () => {
     fetchJobs();
   }, []);
 
+  // Intersection Observer for infinite scrolling
   useEffect(() => {
     const options = {
       root: null,
@@ -85,6 +87,7 @@ const Home = () => {
     return () => observer.current.disconnect();
   }, [hasMore, loading]);
 
+  // Fetch more jobs when page changes
   useEffect(() => {
     const fetchMoreJobs = async () => {
       setLoading(true);
@@ -129,6 +132,7 @@ const Home = () => {
     }
   }, [page]);
 
+  // Update filter values
   const handleFilterChange = (filterName, value) => {
     // If value is null, set it to an empty string
     const filteredValue = value === null ? '' : value;
@@ -139,7 +143,7 @@ const Home = () => {
     }));
   };
 
-
+  // Apply filters to jobs
   const applyFilters = (job) => {
     const { minExperience, companyName, location, remote, techStack, role, minBasePay } = filters;
 
@@ -154,12 +158,13 @@ const Home = () => {
     );
   };
 
-
+  // Filter jobs based on applied filters
   const filteredJobs = jobs.filter(job => applyFilters(job));
 
   return (
     <div className='home'>
       <div className='filters search-bar'>
+        {/* Autocomplete components for filtering */}
         <Autocomplete
           id="role"
           className='grouped-demo'
@@ -172,6 +177,7 @@ const Home = () => {
               endAdornment: !filters.role ? null : params.InputProps.endAdornment,
             }} />}
         />
+        {/* Autocomplete for minimum experience */}
         <Autocomplete
           id="minExperience"
           className='grouped-demo'
@@ -187,6 +193,7 @@ const Home = () => {
           />}
         />
 
+        {/* Autocomplete for tech stack */}
         <Autocomplete
           id="techStack"
           className='grouped-demo'
@@ -201,7 +208,7 @@ const Home = () => {
           />}
         />
 
-
+        {/* Autocomplete for location */}
         <Autocomplete
           id="location"
           className='grouped-demo'
@@ -215,6 +222,8 @@ const Home = () => {
             }}
           />}
         />
+        
+        {/* Autocomplete for remote/on-site */}
         <Autocomplete
           id="remote"
           className='grouped-demo'
@@ -228,6 +237,8 @@ const Home = () => {
             }}
           />}
         />
+
+        {/* Text field for company name */}
         <TextField
           id="companyName"
           className='grouped-demo'
@@ -236,6 +247,8 @@ const Home = () => {
           value={filters.companyName}
           onChange={(e) => handleFilterChange('companyName', e.target.value)}
         />
+
+        {/* Autocomplete for minimum base pay */}
         <Autocomplete
           id="minBasePay"
           className='grouped-demo'
@@ -245,9 +258,9 @@ const Home = () => {
               {...params}
               label="Min Base Pay"
               InputProps={{
-              ...params.InputProps,
-              endAdornment: !filters.remote ? null : params.InputProps.endAdornment,
-            }}
+                ...params.InputProps,
+                endAdornment: !filters.remote ? null : params.InputProps.endAdornment,
+              }}
             />
           )}
           value={filters.minBasePay}
@@ -257,11 +270,13 @@ const Home = () => {
       <div className='jobs_sec'>
         <h1>Jobs:</h1>
         <div className="job-list">
+          {/* Display loader if data is loading */}
           {loading ? (
             <Loader />
-          ) : filteredJobs.length > 0 ? (
+          ) : filteredJobs.length > 0 ? ( // If there are filtered jobs
             filteredJobs.map((job, index) => (
               <div key={index}>
+                {/* Display job cards */}
                 <JobCard
                   companyName={job.companyName}
                   jdLink={job.jdLink}
@@ -276,12 +291,14 @@ const Home = () => {
                   salaryCurrencyCode={job.salaryCurrencyCode}
                   filters={filters}
                 />
+                {/* Add reference to the last job card */}
                 {index === filteredJobs.length - 1 && <div ref={lastJobCardRef}></div>}
               </div>
             ))
           ) : (
-            <NullJobs />
+            <NullJobs /> // Display no jobs component if no jobs found
           )}
+          {/* Display message when no more jobs */}
           {!loading && !hasMore && <p>No more jobs</p>}
         </div>
       </div>

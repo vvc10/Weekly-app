@@ -1,285 +1,313 @@
-*{
- padding: 0;
- margin: 0;
+/* Global reset */
+* {
+    padding: 0;
+    margin: 0;
 }
+
+/* Styles for job card */
 .job-card {
-    background-color: transparent;
-    max-width: 360px;
-    box-shadow: 0px 0px 10px 1px rgb(222, 222, 222);
-    height: 100% !important;
-    position: relative !important;
-    border-radius: 20px !important;
-    padding: 20px !important;
-    height: max-content;
+    background-color: transparent; /* Transparent background */
+    max-width: 360px; /* Maximum width */
+    box-shadow: 0px 0px 10px 1px rgb(222, 222, 222); /* Box shadow */
+    height: 100% !important; /* Height */
+    position: relative !important; /* Position */
+    border-radius: 20px !important; /* Border radius */
+    padding: 20px !important; /* Padding */
+    height: max-content; /* Maximum content height */
 }
-.jobs_sec>h1{
-    font-size: 14px;
-    text-align: left;
 
+/* Styles for jobs section title */
+.jobs_sec > h1 {
+    font-size: 14px; /* Font size */
+    text-align: left; /* Text alignment */
 }
+
+/* Styles for job card head section */
 .job-card-head {
-    height: 5%;
-    /* background-color: red; */
-    text-align: left;
+    height: 5%; /* Height */
+    text-align: left; /* Text alignment */
 }
 
-.job-card-head>span {
-    padding: 4px 6px;
-    box-shadow: rgba(6, 6, 6, 0.05) 0px 2px 6px 0px;
-    border-radius: 10px;
-    border: 1px solid rgb(230, 230, 230);
-    font-weight: 400;
-    line-height: 1.5;
-    font-size: 9px;
-    color: #656565;
+/* Styles for job card head span */
+.job-card-head > span {
+    padding: 4px 6px; /* Padding */
+    box-shadow: rgba(6, 6, 6, 0.05) 0px 2px 6px 0px; /* Box shadow */
+    border-radius: 10px; /* Border radius */
+    border: 1px solid rgb(230, 230, 230); /* Border */
+    font-weight: 400; /* Font weight */
+    line-height: 1.5; /* Line height */
+    font-size: 9px; /* Font size */
+    color: #656565; /* Text color */
 }
 
+/* Styles for job card main section */
 .job-card-main-sec {
-    height: 80%;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
+    height: 80%; /* Height */
+    display: flex; /* Flex display */
+    flex-direction: column; /* Column layout */
+    gap: 0; /* Gap */
 }
 
+/* Styles for job card main section head */
 .job-card-main-sec-head {
-    display: flex;
-    flex-direction: row;
-    padding: 10px 5px;
-    /* background-color: red; */
-    height: 10%;
-    line-height: 0;
+    display: flex; /* Flex display */
+    flex-direction: row; /* Row layout */
+    padding: 10px 5px; /* Padding */
+    height: 10%; /* Height */
+    line-height: 0; /* Line height */
 }
 
-.job-card-main-sec-head>img {
-    height: 40px;
-    width: 10%;
-    line-height: 0;
-
+/* Styles for job card main section head image */
+.job-card-main-sec-head > img {
+    height: 40px; /* Height */
+    width: 10%; /* Width */
+    line-height: 0; /* Line height */
 }
 
+/* Styles for job card main section head company info */
 .jcmshinhead {
-    width: 90%;
-    text-align: left;
-    padding: 0px 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 0px;
-    height: fit-content;
-    /* background-color: aqua; */
+    width: 90%; /* Width */
+    text-align: left; /* Text alignment */
+    padding: 0px 10px; /* Padding */
+    display: flex; /* Flex display */
+    flex-direction: column; /* Column layout */
+    gap: 0px; /* Gap */
+    height: fit-content; /* Height */
 }
 
-.jcmshinhead>h2 {
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    margin-bottom: 3px;
-    color: #8b8b8b;
-    /* background-color: red; */
-    height: fit-content;
-    line-height: 1.2;
+/* Styles for job card main section head company name */
+.jcmshinhead > h2 {
+    font-size: 13px; /* Font size */
+    font-weight: 600; /* Font weight */
+    letter-spacing: 1px; /* Letter spacing */
+    margin-bottom: 3px; /* Margin bottom */
+    color: #8b8b8b; /* Text color */
+    height: fit-content; /* Height */
+    line-height: 1.2; /* Line height */
 }
 
-.jcmshinhead>p {
-    font-size: 14px;
-    font-weight: 500;
-    letter-spacing: 1px;
-    margin-bottom: 3px;
-    color: #000000;
-    /* background-color: red; */
-    height: fit-content;
-    line-height: 1.2;
+/* Styles for job card main section head job role */
+.jcmshinhead > p {
+    font-size: 14px; /* Font size */
+    font-weight: 500; /* Font weight */
+    letter-spacing: 1px; /* Letter spacing */
+    margin-bottom: 3px; /* Margin bottom */
+    color: #000000; /* Text color */
+    height: fit-content; /* Height */
+    line-height: 1.2; /* Line height */
 }
 
-.jcmshinhead>.head-jobloc {
-    font: 10px;
+/* Styles for job card main section head job location */
+.jcmshinhead > .head-jobloc {
+    font: 10px; /* Font size */
 }
 
+/* Styles for job card estimated section */
 .job-card-estd {
-    /* background-color: aqua; */
-    height: fit-content;
-    padding: 0 5px;
-    text-align: left;
-    height: 10%;
-    margin: 8px 0;
-
-}
-.job-card-estd>p{
-    /* background-color: red; */
-}
-.job-card-about-company{
-    text-align: left;
-    width: 100%;
-    min-height: 60%;
+    height: fit-content; /* Height */
+    padding: 0 5px; /* Padding */
+    text-align: left; /* Text alignment */
+    height: 10%; /* Height */
+    margin: 8px 0; /* Margin */
 }
 
-.job-card-about-company>label{
-    font-size: 16px;
-    font-weight: 600;
-    line-height: .1;
-    text-align: left;
+/* Styles for job card estimated section text */
+.job-card-estd > p {
+    /* No specific styles */
 }
 
-.job-card-about-company>p{
-    font-size: 13px;
-    font-weight: 400;
-    text-align: left;
+/* Styles for job card about company section */
+.job-card-about-company {
+    text-align: left; /* Text alignment */
+    width: 100%; /* Width */
+    min-height: 60%; /* Minimum height */
+}
+
+/* Styles for job card about company label */
+.job-card-about-company > label {
+    font-size: 16px; /* Font size */
+    font-weight: 400 !important; /* Font weight */
+    line-height: .1; /* Line height */
+    text-align: left; /* Text alignment */
+}
+
+/* Styles for job card about company description */
+.job-card-about-company > p {
+    font-size: 13px; /* Font size */
+    font-weight: 400; /* Font weight */
+    text-align: left; /* Text alignment */
+}
+
+/* Styles for job card view more button */
+.job-card-about-company > .view-job-btn {
+    position: absolute; /* Position */
+    width: 90%; /* Width */
+    bottom: 200px; /* Bottom position */
+    background: linear-gradient(to top, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0)); /* Gradient background */
+    text-align: center; /* Text alignment */
+    padding: 180px 0 0 0; /* Padding */
+    border: 0px solid transparent; /* Border */
+    color: blue; /* Text color */
+    cursor: pointer; /* Cursor */
+}
+
+/* Styles for job card experience salary section */
+.job-card-exp-sal {
+    width: 100%; /* Width */
+    text-align: left; /* Text alignment */
+    display: flex; /* Flex display */
+    flex-direction: column; /* Column layout */
+    gap: .8px; /* Gap */
+    color: #8b8b8b; /* Text color */
+    height: 20%; /* Height */
+    font-weight: 500 !important; /* Font weight */
+}
+
+/* Styles for job card experience salary section span */
+.job-card-exp-sal > span {
+    color: black; /* Text color */
+    font-weight: 400; /* Font weight */
+}
+
+/* Styles for job details section */
+.job-details {
+    display: flex; /* Flex display */
+    flex-direction: column; /* Column layout */
+    gap: 10px; /* Gap */
+    height: 15%; /* Height */
+}
  
-    /* line-height: ; */
-}
-.job-card-about-company>.view-job-btn{
-    position: absolute;
-    /* background-color: red; */
-    width: 90%;
-    /* height: 100px; */
-    bottom: 200px;
-    background: linear-gradient(to top, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0));    
-    text-align: center;
-    padding: 180px 0 0 0;
-    border: 0px solid transparent;
-    color: blue;
-cursor: pointer;
-}
-.job-card-exp-sal{
-    /* background-color: red; */
-    width: 100%;
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-    gap: .8px;
-    color: #8b8b8b;
-height: 20%;
-font-weight: 500 !important;
-}
-.job-card-exp-sal>span{
-    color: black;
-    font-weight: 400;
-}
-.job-details{
-    /* background-color: red; */
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    height: 15%;
-}
-.job-details>a>button{
-    width: 100%;
-    padding: 8px 18px;
-    border: 0px solid transparent;
-    border-radius: 8px;
-
-}
-.job-details-apply-btn{
-    font-size: 16px;
-    font-weight: 500;
-    color: #000000;
-    background-color: rgb(85, 239, 196);
-}
-.job-details-referral-asks{
-    font-size: 16px;
-    color: #ffffff;
-    background-color:#4943da;
-}
-
-
-
-/* expanding view more aimation */
-
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.3);
-    z-index: 999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    
-}
-
-.modal {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    min-width: 400px;
-    max-width: 80%;
-    max-height: 80vh;
-    overflow-y: auto;
-    background-color: rgb(255, 255, 255);
-    outline: solid 0px;
-    box-shadow: rgba(0, 0, 0, 0.2) 0px 11px 15px -7px, rgba(0, 0, 0, 0.14) 0px 24px 38px 3px, rgba(0, 0, 0, 0.12) 0px 9px 46px 8px;
-    padding: 16px;
-    border-radius: 10px;
-}
-.modal-head{
-    width: 95%;
-    height: 20%;
-    position: fixed;
-    display: flex;
-    flex-direction: row;
-}
-.modal-head>label{
-    margin: 0px 0px 15px;
-    font-size: 1.25rem;
-    line-height: 1.6;
-    text-align: center;
-    font-weight: 600 !important;
- width: 80%;
-}
-.modal-content {
-    margin-top: 10%;
-    min-height: 80%;
-    max-height: 80%;
-    overflow-y: auto;
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-}
-/* For smaller screens */
-@media (max-width: 768px) {
-    .modal {
-        min-width: 300px !important;
-        max-width: 80%;
-    }
-}
-
-/* For larger screens */
-@media (min-width: 1200px) {
-    .modal {
-        width: 60%;
-    }
-}
-
-
-.modal-content span {
-    font-weight: 500 !important;
-font-size: 15px;
-margin-bottom: .2rem;
-}
-
-.modal-content h2,
-.modal-content p {
-    margin-bottom: 10px;
-    font-weight: 400 !important;
-    line-height: 1.5;
-    font-size: 14px;
-    white-space: pre-wrap;
-}
-
-.close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
+/* Styles for job details buttons */
+.job-details > a > button {
+    width: 100%; /* Width */
+    padding: 8px 18px; /* Padding */
+    border: 0px solid transparent; /* Border */
+    border-radius: 8px; /* Border radius */
     cursor: pointer;
 }
 
+/* Styles for apply button */
+.job-details-apply-btn {
+    font-size: 16px; /* Font size */
+    font-weight: 500; /* Font weight */
+    color: #000000; /* Text color */
+    background-color: rgb(85, 239, 196); /* Background color */
+}
+
+/* Styles for referral asks button */
+.job-details-referral-asks {
+    font-size: 16px; /* Font size */
+    color: #ffffff; /* Text color */
+    background-color: #4943da; /* Background color */
+}
+
+/* Styles for modal overlay */
+.modal-overlay {
+    position: fixed; /* Position */
+    top: 0; /* Top position */
+    left: 0; /* Left position */
+    width: 100%; /* Width */
+    height: 100%; /* Height */
+    background-color: rgba(0, 0, 0, 0.3); /* Background color */
+    z-index: 999; /* Z-index */
+    display: flex; /* Flex display */
+    justify-content: center; /* Justify content */
+    align-items: center; /* Align items */
+}
+
+/* Styles for modal */
+.modal {
+    position: absolute; /* Position */
+    top: 50%; /* Top position */
+    left: 50%; /* Left position */
+    transform: translate(-50%, -50%); /* Centering */
+    min-width: 400px; /* Minimum width */
+    max-width: 80%; /* Maximum width */
+    max-height: 80vh; /* Maximum height */
+    overflow-y: auto; /* Overflow */
+    background-color: rgb(255, 255, 255); /* Background color */
+    outline: solid 0px; /* Outline */
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 11px 15px -7px, rgba(0, 0, 0, 0.14) 0px 24px 38px 3px, rgba(0, 0, 0, 0.12) 0px 9px 46px 8px; /* Box shadow */
+    padding: 16px; /* Padding */
+    border-radius: 10px; /* Border radius */
+}
+
+/* Styles for modal header */
+.modal-head {
+    width: 95%; /* Width */
+    height: 20%; /* Height */
+    position: fixed; /* Position */
+    display: flex; /* Flex display */
+    flex-direction: row; /* Row layout */
+}
+
+/* Styles for modal header label */
+.modal-head > label {
+    margin: 0px 0px 15px; /* Margin */
+    font-size: 1.25rem; /* Font size */
+    line-height: 1.6; /* Line height */
+    text-align: center; /* Text alignment */
+    font-weight: 600 !important; /* Font weight */
+    width: 80%; /* Width */
+}
+
+/* Styles for modal content */
+.modal-content {
+    margin-top: 10%; /* Margin top */
+    min-height: 80%; /* Minimum height */
+    max-height: 80%; /* Maximum height */
+    overflow-y: auto; /* Overflow */
+    text-align: left; /* Text alignment */
+    display: flex; /* Flex display */
+    flex-direction: column; /* Column layout */
+}
+
+/* Styles for modal content span */
+.modal-content span {
+    font-weight: 500 !important; /* Font weight */
+    font-size: 15px; /* Font size */
+    margin-bottom: .2rem; /* Margin bottom */
+}
+
+/* Styles for modal content headings and paragraphs */
+.modal-content h2,
+.modal-content p {
+    margin-bottom: 10px; /* Margin bottom */
+    font-weight: 400 !important; /* Font weight */
+    line-height: 1.5; /* Line height */
+    font-size: 14px; /* Font size */
+    white-space: pre-wrap; /* White space */
+}
+
+/* Styles for close button */
+.close {
+    position: absolute; /* Position */
+    top: 10px; /* Top position */
+    right: 10px; /* Right position */
+    cursor: pointer; /* Cursor */
+}
+
+/* Animation for fade in */
 @keyframes fadeIn {
     from {
-        opacity: 0;
+        opacity: 0; /* From opacity */
     }
     to {
-        opacity: 1;
+        opacity: 1; /* To opacity */
+    }
+}
+
+/* Media query for smaller screens */
+@media (max-width: 768px) {
+    .modal {
+        min-width: 300px !important; /* Minimum width */
+        max-width: 80%; /* Maximum width */
+    }
+}
+
+/* Media query for larger screens */
+@media (min-width: 1200px) {
+    .modal {
+        width: 60%; /* Width */
     }
 }
