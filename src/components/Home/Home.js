@@ -4,6 +4,7 @@ import TextField from '@mui/material/TextField';
 import './Home.css';
 import JobCard from './JobCard.js';
 import Loader from '../Loader.js';
+import NullJobs from './NullJobs.js'; // Assuming NullJobs component exists
 
 const Home = () => {
   const [jobs, setJobs] = useState([]);
@@ -149,7 +150,7 @@ const Home = () => {
       ((remote === '' && !job.remote) || (job.remote && job.remote.toLowerCase() === remote.toLowerCase())) &&
       (techStack === '' || (job.techStack && job.techStack.toLowerCase().includes(techStack.toLowerCase()))) &&
       (role === '' || (job.jobRole && job.jobRole.toLowerCase().includes(role.toLowerCase()))) &&
-      (minBasePay === '' || job.minBasePay >= minBasePay)
+      (minBasePay === '' || job.minJdSalary >= minBasePay)
     );
   };
 
@@ -162,7 +163,7 @@ const Home = () => {
         <Autocomplete
           id="role"
           className='grouped-demo'
-          options={["", "Frontend", "Backend", "ios"]} // Replace with actual role options
+          options={["", "Frontend", "Backend", "ios", "Designer", "FullStack", "Flutter", "React Native", "Graphic Designer", "Design manager"]} // Replace with actual role options
           value={filters.role}
           onChange={(e, value) => handleFilterChange('role', value)}
           renderInput={(params) => <TextField {...params} label="Role"
@@ -189,7 +190,7 @@ const Home = () => {
         <Autocomplete
           id="techStack"
           className='grouped-demo'
-          options={["", "ReactJS", "Java", "NodeJS"]} // Replace with actual tech stack options
+          options={["", "ReactJS", "Java", "NodeJS", "Redux", "Material UI"]} // Replace with actual tech stack options
           value={filters.techStack}
           onChange={(e, value) => handleFilterChange('techStack', value)}
           renderInput={(params) => <TextField {...params} label="Tech Stack"
@@ -204,7 +205,7 @@ const Home = () => {
         <Autocomplete
           id="location"
           className='grouped-demo'
-          options={["", "Pune", "Mumbai", "Bangalore"]} // Replace with actual locations
+          options={["", "Pune", "Mumbai", "Bangalore", "Tamil Nadu", "West Bengal", "New Delhi"]} // Replace with actual locations
           value={filters.location}
           onChange={(e, value) => handleFilterChange('location', value)}
           renderInput={(params) => <TextField {...params} label="Location"
@@ -227,8 +228,6 @@ const Home = () => {
             }}
           />}
         />
-
-
         <TextField
           id="companyName"
           className='grouped-demo'
@@ -237,39 +236,52 @@ const Home = () => {
           value={filters.companyName}
           onChange={(e) => handleFilterChange('companyName', e.target.value)}
         />
-        <TextField
+        <Autocomplete
           id="minBasePay"
           className='grouped-demo'
-          label="Min Base Pay"
-          type="number"
+          options={[0, 100, 200, 300, 400]} // Example options
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Min Base Pay"
+              InputProps={{
+              ...params.InputProps,
+              endAdornment: !filters.remote ? null : params.InputProps.endAdornment,
+            }}
+            />
+          )}
           value={filters.minBasePay}
-          onChange={(e) => handleFilterChange('minBasePay', e.target.value)}
+          onChange={(e, value) => handleFilterChange('minBasePay', value)}
         />
       </div>
       <div className='jobs_sec'>
         <h1>Jobs:</h1>
         <div className="job-list">
-          {filteredJobs.map((job, index) => (
-            <div key={index}>
-              <JobCard
-                companyName={job.companyName}
-                jdLink={job.jdLink}
-                jobDetailsFromCompany={job.jobDetailsFromCompany.split(' ').slice(0, 70).join(' ')}
-                jobRole={job.jobRole}
-                location={job.location}
-                logoUrl={job.logoUrl}
-                maxExp={job.maxExp}
-                maxJdSalary={job.maxJdSalary}
-                minExp={job.minExp || job.maxExp} // If min experience is null, use max experience
-                minJdSalary={job.minJdSalary || job.maxJdSalary} // If min salary is null, use max salary
-
-                salaryCurrencyCode={job.salaryCurrencyCode}
-                filters={filters}
-              />
-              {index === filteredJobs.length - 1 && <div ref={lastJobCardRef}></div>}
-            </div>
-          ))}
-          {loading && <Loader />}
+          {loading ? (
+            <Loader />
+          ) : filteredJobs.length > 0 ? (
+            filteredJobs.map((job, index) => (
+              <div key={index}>
+                <JobCard
+                  companyName={job.companyName}
+                  jdLink={job.jdLink}
+                  jobDetailsFromCompany={job.jobDetailsFromCompany}
+                  jobRole={job.jobRole}
+                  location={job.location}
+                  logoUrl={job.logoUrl}
+                  maxExp={job.maxExp}
+                  maxJdSalary={job.maxJdSalary}
+                  minExp={job.minExp || job.maxExp} // If min experience is null, use max experience
+                  minJdSalary={job.minJdSalary || job.maxJdSalary} // If min salary is null, use max salary
+                  salaryCurrencyCode={job.salaryCurrencyCode}
+                  filters={filters}
+                />
+                {index === filteredJobs.length - 1 && <div ref={lastJobCardRef}></div>}
+              </div>
+            ))
+          ) : (
+            <NullJobs />
+          )}
           {!loading && !hasMore && <p>No more jobs</p>}
         </div>
       </div>
