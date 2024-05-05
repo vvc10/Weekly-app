@@ -1,22 +1,24 @@
 *{
-    
-  font-family: "Lexend", sans-serif;
-  font-optical-sizing: auto;
-  font-style: normal;
-  font-weight: 400;
+ padding: 0;
+ margin: 0;
 }
 .job-card {
     background-color: transparent;
-    width: 360px;
+    max-width: 360px;
     box-shadow: 0px 0px 10px 1px rgb(222, 222, 222);
     height: 100% !important;
     position: relative !important;
     border-radius: 20px !important;
     padding: 20px !important;
+    height: max-content;
 }
-
+.jobs_sec>h1{
+    font-size: 14px;
+    text-align: left;
+    padding: 0 2rem;
+}
 .job-card-head {
-    height: 10%;
+    height: 5%;
     /* background-color: red; */
     text-align: left;
 }
@@ -33,7 +35,7 @@
 }
 
 .job-card-main-sec {
-    height: 70%;
+    height: 80%;
     display: flex;
     flex-direction: column;
     gap: 0;
@@ -44,7 +46,7 @@
     flex-direction: row;
     padding: 10px 5px;
     /* background-color: red; */
-    height: 5%;
+    height: 10%;
     line-height: 0;
 }
 
@@ -74,18 +76,18 @@
     color: #8b8b8b;
     /* background-color: red; */
     height: fit-content;
-    line-height: 0;
+    line-height: 1.2;
 }
 
 .jcmshinhead>p {
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 500;
     letter-spacing: 1px;
     margin-bottom: 3px;
     color: #000000;
     /* background-color: red; */
     height: fit-content;
-    line-height: .5;
+    line-height: 1.2;
 }
 
 .jcmshinhead>.head-jobloc {
@@ -97,6 +99,8 @@
     height: fit-content;
     padding: 0 5px;
     text-align: left;
+    height: 10%;
+    margin: 8px 0;
 
 }
 .job-card-estd>p{
@@ -105,6 +109,7 @@
 .job-card-about-company{
     text-align: left;
     width: 100%;
+    min-height: 60%;
 }
 
 .job-card-about-company>label{
@@ -124,9 +129,9 @@
 .job-card-about-company>.view-job-btn{
     position: absolute;
     /* background-color: red; */
-    width: 100%;
+    width: 90%;
     /* height: 100px; */
-    bottom: 185px;
+    bottom: 200px;
     background: linear-gradient(to top, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0));    
     text-align: center;
     padding: 180px 0 0 0;
@@ -142,16 +147,19 @@ cursor: pointer;
     flex-direction: column;
     gap: .8px;
     color: #8b8b8b;
-
+height: 20%;
+font-weight: 500 !important;
 }
 .job-card-exp-sal>span{
     color: black;
+    font-weight: 400;
 }
 .job-details{
     /* background-color: red; */
     display: flex;
     flex-direction: column;
     gap: 10px;
+    height: 15%;
 }
 .job-details>a>button{
     width: 100%;
@@ -162,11 +170,12 @@ cursor: pointer;
 }
 .job-details-apply-btn{
     font-size: 16px;
+    font-weight: 500;
     color: #000000;
     background-color: rgb(85, 239, 196);
 }
 .job-details-referral-asks{
     font-size: 16px;
     color: #ffffff;
-    background-color:hsl(275, 100%, 25%, .8);
+    background-color:#4943da;
 }

@@ -20,6 +20,7 @@ const JobCard = ({
     return (
         <>
             <div className="job-card">
+            
                 <div className='job-card-head'>
                     <span>⏳ Posted 19 days ago</span>
                 </div>

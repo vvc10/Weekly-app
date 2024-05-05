@@ -1,38 +1,77 @@
 *{
+    color: hsl(0, 0%, 0%, .85);
     font-family: "Lexend", sans-serif;
     font-optical-sizing: auto;
     font-style: normal;
-    font-weight: 400;
+    font-weight: 300 !important;
+    padding: 0;
+    margin: 0;
 }
 .search-bar{
     margin: 2rem 2rem;
     display: flex;
     flex-direction: row;
     gap: 1rem;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    background-color: transparent;
+    /* background-color: #e36161 !important; */
 }
-.grouped-demo{
-    width: 100%;
-    font-family: "Lexend", sans-serif;
-    min-width: fit-content;
 
+.search-bar .MuiAutocomplete-root {
+    /* background-color: red; */
+    flex: 1 1 200px; /* Adjust the width as needed */
+   
+  }
+  
+  /* Adjust for smaller screens */
+  @media (max-width: 768px) {
+    .search-bar .MuiAutocomplete-root {
+      flex: 1 1 100%; /* Allow full width for smaller screens */
+    }
+  }
+.grouped-demo{
+    margin: 2px 5px 2px 0 !important;
+    font-family: "Lexend", sans-serif;
+    border-radius: 20px;
 }
 
 .job-list {
-    padding: 1rem;
+    padding: 1rem 2rem;
+    padding-bottom: 8rem;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* 3 cards per row */
+    grid-template-columns: repeat(3, minmax(300px, 1fr)); /* 3 cards per row by default */
     gap: 20px; /* Gap between cards */
-  }
-  
-  @media (max-width: 1024px) {
+    row-gap: 80px; /* Gap between rows */
+    width: 100%; /* Full width */
+margin: auto;
+}
+
+@media (max-width: 1024px) {
     .job-list {
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Adjust for smaller screens */
+        padding: 1rem 1rem;
+        width: fit-content; /* Full width */
+    margin: auto;
+        grid-template-columns: repeat(2, minmax(250px, 1fr)); /* 2 cards per row for medium screens */
     }
-  }
-  
-  @media (max-width: 768px) {
+}
+.job-card{
+    margin: 20px 20px 40px 20px!important;
+
+}
+@media (max-width: 768px) {
     .job-list {
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Adjust for smaller screens */
+        padding: 1rem 1rem;
+        grid-template-columns: repeat(1, minmax(100%, 1fr)); /* 1 card per row for small screens */
     }
-  }
-  
+    .job-card{
+        width: 280px !important;
+    }
+}
+@media (min-width: 768px) and (max-width: 1024px){
+    .job-list {
+        padding: 1rem 1rem;
+        grid-template-columns: repeat(2, minmax(50%, 1fr)); /* 1 card per row for small screens */
+    }
+}
+

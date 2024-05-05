@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
-import TextField  from '@mui/material/TextField';
+import TextField from '@mui/material/TextField';
 import './Home.css';
 import JobCard from './JobCard.js';
+import Loader from '../Loader.js';
 
 const Home = () => {
   const [jobs, setJobs] = useState([]);
@@ -26,18 +27,18 @@ const Home = () => {
     const fetchJobs = async () => {
       const myHeaders = new Headers();
       myHeaders.append('Content-Type', 'application/json');
-
+  
       const body = JSON.stringify({
         limit: 8,
         offset: 0
       });
-
+  
       const requestOptions = {
         method: 'POST',
         headers: myHeaders,
         body
       };
-
+  
       try {
         const response = await fetch(
           'https://api.weekday.technology/adhoc/getSampleJdJSON',
@@ -47,6 +48,7 @@ const Home = () => {
           throw new Error('Failed to fetch data');
         }
         const data = await response.json();
+        console.log('Fetched data:', data.jdList); // Log the fetched data
         if (!Array.isArray(data.jdList)) {
           throw new Error('Data format is not correct');
         }
@@ -58,10 +60,10 @@ const Home = () => {
         setLoading(false);
       }
     };
-
+  
     fetchJobs();
   }, []);
-
+  
   useEffect(() => {
     const options = {
       root: null,
@@ -108,6 +110,7 @@ const Home = () => {
           throw new Error('Failed to fetch data');
         }
         const data = await response.json();
+       
         if (!Array.isArray(data.jdList)) {
           throw new Error('Data format is not correct');
         }
@@ -126,53 +129,75 @@ const Home = () => {
   }, [page]);
 
   const handleFilterChange = (filterName, value) => {
+    // If value is null, set it to an empty string
+    const filteredValue = value === null ? '' : value;
+
     setFilters(prevFilters => ({
       ...prevFilters,
-      [filterName]: value
+      [filterName]: filteredValue
     }));
   };
 
+
   const applyFilters = (job) => {
     const { minExperience, companyName, location, remote, techStack, role, minBasePay } = filters;
-  
+
     return (
       (minExperience === '' || job.minExp >= minExperience) &&
-      (companyName === '' || job.companyName.toLowerCase().includes(companyName.toLowerCase())) &&
-      (location === '' || (job.location && job.location.toLowerCase().includes(location.toLowerCase()))) && // Add null check
-      ((remote === '' && !job.remote) || (job.remote && job.remote.toLowerCase() === remote.toLowerCase())) &&      (techStack === '' || job.techStack.toLowerCase().includes(techStack.toLowerCase())) &&
-      (role === '' || job.jobRole.toLowerCase().includes(role.toLowerCase())) &&
+      (companyName === '' || (job.companyName && job.companyName.toLowerCase().includes(companyName.toLowerCase()))) &&
+      (location === '' || (job.location && job.location.toLowerCase().includes(location.toLowerCase()))) &&
+      ((remote === '' && !job.remote) || (job.remote && job.remote.toLowerCase() === remote.toLowerCase())) &&
+      (techStack === '' || (job.techStack && job.techStack.toLowerCase().includes(techStack.toLowerCase()))) &&
+      (role === '' || (job.jobRole && job.jobRole.toLowerCase().includes(role.toLowerCase()))) &&
       (minBasePay === '' || job.minBasePay >= minBasePay)
     );
   };
+
 
   const filteredJobs = jobs.filter(job => applyFilters(job));
 
   return (
     <div className='home'>
       <div className='filters search-bar'>
+
         <Autocomplete
           id="minExperience"
           className='grouped-demo'
           options={["", 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
           value={filters.minExperience}
           onChange={(e, value) => handleFilterChange('minExperience', value)}
-          renderInput={(params) => <TextField {...params} label="Min Experience" />}
+          renderInput={(params) => <TextField {...params} label="Min Experience"
+
+            InputProps={{
+              ...params.InputProps,
+              endAdornment: !filters.minExperience ? null : params.InputProps.endAdornment,
+            }}
+          />}
         />
-        <Autocomplete
-          id="companyName"
-          className='grouped-demo'
-          options={["", "Company A", "Company B", "Company C"]} // Replace with actual company names
-          value={filters.companyName}
-          onChange={(e, value) => handleFilterChange('companyName', value)}
-          renderInput={(params) => <TextField {...params} label="Company Name" />}
-        />
+
+
+<TextField
+  id="companyName"
+  className='grouped-demo'
+  label="Company name"
+  type="text"
+  value={filters.companyName}
+  onChange={(e) => handleFilterChange('companyName', e.target.value)}
+/>
+
+
         <Autocomplete
           id="location"
           className='grouped-demo'
-          options={["", "Location A", "Location B", "Location C"]} // Replace with actual locations
+          options={["", "Pune", "Mumbai", "Bangalore"]} // Replace with actual locations
           value={filters.location}
           onChange={(e, value) => handleFilterChange('location', value)}
-          renderInput={(params) => <TextField {...params} label="Location" />}
+          renderInput={(params) => <TextField {...params} label="Location"
+            InputProps={{
+              ...params.InputProps,
+              endAdornment: !filters.location ? null : params.InputProps.endAdornment,
+            }}
+          />}
         />
         <Autocomplete
           id="remote"
@@ -180,23 +205,37 @@ const Home = () => {
           options={["", "remote", "on-site"]}
           value={filters.remote}
           onChange={(e, value) => handleFilterChange('remote', value)}
-          renderInput={(params) => <TextField {...params} label="Remote/On-site" />}
+          renderInput={(params) => <TextField {...params} label="Remote/On-site"
+            InputProps={{
+              ...params.InputProps,
+              endAdornment: !filters.remote ? null : params.InputProps.endAdornment,
+            }}
+          />}
         />
         <Autocomplete
           id="techStack"
           className='grouped-demo'
-          options={["", "Tech A", "Tech B", "Tech C"]} // Replace with actual tech stack options
+          options={["", "ReactJS", "Java", "NodeJS"]} // Replace with actual tech stack options
           value={filters.techStack}
           onChange={(e, value) => handleFilterChange('techStack', value)}
-          renderInput={(params) => <TextField {...params} label="Tech Stack" />}
+          renderInput={(params) => <TextField {...params} label="Tech Stack"
+            InputProps={{
+              ...params.InputProps,
+              endAdornment: !filters.techStack ? null : params.InputProps.endAdornment,
+            }}
+          />}
         />
         <Autocomplete
           id="role"
           className='grouped-demo'
-          options={["", "Role A", "Role B", "Role C"]} // Replace with actual role options
+          options={["", "Frontend", "Backend", "ios"]} // Replace with actual role options
           value={filters.role}
           onChange={(e, value) => handleFilterChange('role', value)}
-          renderInput={(params) => <TextField {...params} label="Role" />}
+          renderInput={(params) => <TextField {...params} label="Role"
+            InputProps={{
+              ...params.InputProps,
+              endAdornment: !filters.role ? null : params.InputProps.endAdornment,
+            }} />}
         />
         <TextField
           id="minBasePay"
@@ -208,27 +247,28 @@ const Home = () => {
         />
       </div>
       <div className='jobs_sec'>
-        <h1>Jobs</h1>
+        <h1>Jobs:</h1>
         <div className="job-list">
           {filteredJobs.map((job, index) => (
             <div key={index}>
               <JobCard
                 companyName={job.companyName}
                 jdLink={job.jdLink}
-                jobDetailsFromCompany={job.jobDetailsFromCompany}
+                jobDetailsFromCompany={job.jobDetailsFromCompany.split(' ').slice(0, 70).join(' ')}
                 jobRole={job.jobRole}
                 location={job.location}
                 logoUrl={job.logoUrl}
                 maxExp={job.maxExp}
                 maxJdSalary={job.maxJdSalary}
-                minExp={job.minExp}
-                minJdSalary={job.minJdSalary}
+                minExp={job.minExp || job.maxExp} // If min experience is null, use max experience
+  minJdSalary={job.minJdSalary || job.maxJdSalary} // If min salary is null, use max salary
+
                 salaryCurrencyCode={job.salaryCurrencyCode}
               />
               {index === filteredJobs.length - 1 && <div ref={lastJobCardRef}></div>}
             </div>
           ))}
-          {loading && <p>Loading...</p>}
+          {loading && <Loader/>}
           {!loading && !hasMore && <p>No more jobs</p>}
         </div>
       </div>
