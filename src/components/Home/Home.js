@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField';
 import './Home.css';
 import JobCard from './JobCard.js';
 import Loader from '../Loader.js';
-import NullJobs from './NullJobs.js'; // Assuming NullJobs component exists
+import NullJobs from './NullJobs.js';
 
 const Home = () => {
   const [jobs, setJobs] = useState([]);
@@ -20,19 +20,20 @@ const Home = () => {
     role: '',
     minBasePay: ''
   });
-  const observer = useRef();
+  const observer = useRef(); // Ref for IntersectionObserver
 
-  const lastJobCardRef = useRef();
+  const lastJobCardRef = useRef(); // Ref for last job card
 
-  // Fetch initial jobs data
+  // Fetch jobs from API
   useEffect(() => {
     const fetchJobs = async () => {
+      setLoading(true);
       const myHeaders = new Headers();
       myHeaders.append('Content-Type', 'application/json');
 
       const body = JSON.stringify({
         limit: 8,
-        offset: 0
+        offset: (page - 1) * 8
       });
 
       const requestOptions = {
@@ -50,11 +51,12 @@ const Home = () => {
           throw new Error('Failed to fetch data');
         }
         const data = await response.json();
-        console.log('Fetched data:', data.jdList); // Log the fetched data
+
         if (!Array.isArray(data.jdList)) {
           throw new Error('Data format is not correct');
         }
-        setJobs(data.jdList);
+
+        setJobs(prevJobs => [...prevJobs, ...data.jdList]);
         setLoading(false);
         setHasMore(data.jdList.length > 0);
       } catch (error) {
@@ -64,9 +66,9 @@ const Home = () => {
     };
 
     fetchJobs();
-  }, []);
+  }, [page]);
 
-  // Intersection Observer for infinite scrolling
+  // Intersection observer for infinite scrolling
   useEffect(() => {
     const options = {
       root: null,
@@ -84,57 +86,11 @@ const Home = () => {
       observer.current.observe(lastJobCardRef.current);
     }
 
-    return () => observer.current.disconnect();
+    return () => observer.current.disconnect(); // Cleanup observer
   }, [hasMore, loading]);
 
-  // Fetch more jobs when page changes
-  useEffect(() => {
-    const fetchMoreJobs = async () => {
-      setLoading(true);
-      const myHeaders = new Headers();
-      myHeaders.append('Content-Type', 'application/json');
-
-      const body = JSON.stringify({
-        limit: page * 8,
-        offset: 0
-      });
-
-      const requestOptions = {
-        method: 'POST',
-        headers: myHeaders,
-        body
-      };
-
-      try {
-        const response = await fetch(
-          'https://api.weekday.technology/adhoc/getSampleJdJSON',
-          requestOptions
-        );
-        if (!response.ok) {
-          throw new Error('Failed to fetch data');
-        }
-        const data = await response.json();
-
-        if (!Array.isArray(data.jdList)) {
-          throw new Error('Data format is not correct');
-        }
-        setJobs(prevJobs => [...prevJobs, ...data.jdList]);
-        setLoading(false);
-        setHasMore(data.jdList.length > 0);
-      } catch (error) {
-        console.error(error);
-        setLoading(false);
-      }
-    };
-
-    if (page > 1) {
-      fetchMoreJobs();
-    }
-  }, [page]);
-
-  // Update filter values
+  // Handle filter change
   const handleFilterChange = (filterName, value) => {
-    // If value is null, set it to an empty string
     const filteredValue = value === null ? '' : value;
 
     setFilters(prevFilters => ({
@@ -164,11 +120,11 @@ const Home = () => {
   return (
     <div className='home'>
       <div className='filters search-bar'>
-        {/* Autocomplete components for filtering */}
+        {/* Autocomplete for job role */}
         <Autocomplete
           id="role"
           className='grouped-demo'
-          options={["", "Frontend", "Backend", "ios", "Designer", "FullStack", "Flutter", "React Native", "Graphic Designer", "Design manager"]} // Replace with actual role options
+          options={["Frontend", "Backend", "ios", "Designer", "FullStack", "Flutter", "React Native", "Graphic Designer", "Design manager"]}
           value={filters.role}
           onChange={(e, value) => handleFilterChange('role', value)}
           renderInput={(params) => <TextField {...params} label="Role"
@@ -185,19 +141,17 @@ const Home = () => {
           value={filters.minExperience}
           onChange={(e, value) => handleFilterChange('minExperience', value)}
           renderInput={(params) => <TextField {...params} label="Min Experience"
-
             InputProps={{
               ...params.InputProps,
               endAdornment: !filters.minExperience ? null : params.InputProps.endAdornment,
             }}
           />}
         />
-
         {/* Autocomplete for tech stack */}
         <Autocomplete
           id="techStack"
           className='grouped-demo'
-          options={["", "ReactJS", "Java", "NodeJS", "Redux", "Material UI"]} // Replace with actual tech stack options
+          options={["ReactJS", "Java", "NodeJS", "Redux", "Material UI"]}
           value={filters.techStack}
           onChange={(e, value) => handleFilterChange('techStack', value)}
           renderInput={(params) => <TextField {...params} label="Tech Stack"
@@ -207,12 +161,11 @@ const Home = () => {
             }}
           />}
         />
-
         {/* Autocomplete for location */}
         <Autocomplete
           id="location"
           className='grouped-demo'
-          options={["", "Pune", "Mumbai", "Bangalore", "Tamil Nadu", "West Bengal", "New Delhi"]} // Replace with actual locations
+          options={["Pune", "Mumbai", "Bangalore", "Tamil Nadu", "West Bengal", "New Delhi"]}
           value={filters.location}
           onChange={(e, value) => handleFilterChange('location', value)}
           renderInput={(params) => <TextField {...params} label="Location"
@@ -222,12 +175,11 @@ const Home = () => {
             }}
           />}
         />
-        
         {/* Autocomplete for remote/on-site */}
         <Autocomplete
           id="remote"
           className='grouped-demo'
-          options={["", "remote", "on-site"]}
+          options={["remote", "on-site"]}
           value={filters.remote}
           onChange={(e, value) => handleFilterChange('remote', value)}
           renderInput={(params) => <TextField {...params} label="Remote/On-site"
@@ -237,7 +189,6 @@ const Home = () => {
             }}
           />}
         />
-
         {/* Text field for company name */}
         <TextField
           id="companyName"
@@ -247,12 +198,11 @@ const Home = () => {
           value={filters.companyName}
           onChange={(e) => handleFilterChange('companyName', e.target.value)}
         />
-
         {/* Autocomplete for minimum base pay */}
         <Autocomplete
           id="minBasePay"
           className='grouped-demo'
-          options={[0, 100, 200, 300, 400]} // Example options
+          options={[0, 100, 200, 300, 400]}
           renderInput={(params) => (
             <TextField
               {...params}
@@ -270,36 +220,31 @@ const Home = () => {
       <div className='jobs_sec'>
         <h1>Jobs:</h1>
         <div className="job-list">
-          {/* Display loader if data is loading */}
-          {loading ? (
-            <Loader />
-          ) : filteredJobs.length > 0 ? ( // If there are filtered jobs
-            filteredJobs.map((job, index) => (
-              <div key={index}>
-                {/* Display job cards */}
-                <JobCard
-                  companyName={job.companyName}
-                  jdLink={job.jdLink}
-                  jobDetailsFromCompany={job.jobDetailsFromCompany}
-                  jobRole={job.jobRole}
-                  location={job.location}
-                  logoUrl={job.logoUrl}
-                  maxExp={job.maxExp}
-                  maxJdSalary={job.maxJdSalary}
-                  minExp={job.minExp || job.maxExp} // If min experience is null, use max experience
-                  minJdSalary={job.minJdSalary || job.maxJdSalary} // If min salary is null, use max salary
-                  salaryCurrencyCode={job.salaryCurrencyCode}
-                  filters={filters}
-                />
-                {/* Add reference to the last job card */}
-                {index === filteredJobs.length - 1 && <div ref={lastJobCardRef}></div>}
-              </div>
-            ))
-          ) : (
-            <NullJobs /> // Display no jobs component if no jobs found
-          )}
-          {/* Display message when no more jobs */}
-          {!loading && !hasMore && <p>No more jobs</p>}
+          {/* Display job cards */}
+          {filteredJobs.map((job, index) => (
+            <div key={index}>
+              <JobCard
+                companyName={job.companyName}
+                jdLink={job.jdLink}
+                jobDetailsFromCompany={job.jobDetailsFromCompany}
+                jobRole={job.jobRole}
+                location={job.location}
+                logoUrl={job.logoUrl}
+                maxExp={job.maxExp}
+                maxJdSalary={job.maxJdSalary}
+                minExp={job.minExp || job.maxExp}
+                minJdSalary={job.minJdSalary || job.maxJdSalary}
+                salaryCurrencyCode={job.salaryCurrencyCode}
+                filters={filters}
+              />
+              {/* Add reference to the last job card */}
+              {index === filteredJobs.length - 1 && <div ref={lastJobCardRef}></div>}
+            </div>
+          ))}
+          {/* Display no jobs component if no jobs found */}
+          {!loading && !hasMore && <NullJobs/>}
+          {/* Display loader while loading */}
+          {loading && <Loader />}
         </div>
       </div>
     </div>
