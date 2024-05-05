@@ -27,18 +27,18 @@ const Home = () => {
     const fetchJobs = async () => {
       const myHeaders = new Headers();
       myHeaders.append('Content-Type', 'application/json');
-  
+
       const body = JSON.stringify({
         limit: 8,
         offset: 0
       });
-  
+
       const requestOptions = {
         method: 'POST',
         headers: myHeaders,
         body
       };
-  
+
       try {
         const response = await fetch(
           'https://api.weekday.technology/adhoc/getSampleJdJSON',
@@ -60,10 +60,10 @@ const Home = () => {
         setLoading(false);
       }
     };
-  
+
     fetchJobs();
   }, []);
-  
+
   useEffect(() => {
     const options = {
       root: null,
@@ -110,7 +110,7 @@ const Home = () => {
           throw new Error('Failed to fetch data');
         }
         const data = await response.json();
-       
+
         if (!Array.isArray(data.jdList)) {
           throw new Error('Data format is not correct');
         }
@@ -159,7 +159,18 @@ const Home = () => {
   return (
     <div className='home'>
       <div className='filters search-bar'>
-
+        <Autocomplete
+          id="role"
+          className='grouped-demo'
+          options={["", "Frontend", "Backend", "ios"]} // Replace with actual role options
+          value={filters.role}
+          onChange={(e, value) => handleFilterChange('role', value)}
+          renderInput={(params) => <TextField {...params} label="Role"
+            InputProps={{
+              ...params.InputProps,
+              endAdornment: !filters.role ? null : params.InputProps.endAdornment,
+            }} />}
+        />
         <Autocomplete
           id="minExperience"
           className='grouped-demo'
@@ -175,15 +186,19 @@ const Home = () => {
           />}
         />
 
-
-<TextField
-  id="companyName"
-  className='grouped-demo'
-  label="Company name"
-  type="text"
-  value={filters.companyName}
-  onChange={(e) => handleFilterChange('companyName', e.target.value)}
-/>
+        <Autocomplete
+          id="techStack"
+          className='grouped-demo'
+          options={["", "ReactJS", "Java", "NodeJS"]} // Replace with actual tech stack options
+          value={filters.techStack}
+          onChange={(e, value) => handleFilterChange('techStack', value)}
+          renderInput={(params) => <TextField {...params} label="Tech Stack"
+            InputProps={{
+              ...params.InputProps,
+              endAdornment: !filters.techStack ? null : params.InputProps.endAdornment,
+            }}
+          />}
+        />
 
 
         <Autocomplete
@@ -212,30 +227,15 @@ const Home = () => {
             }}
           />}
         />
-        <Autocomplete
-          id="techStack"
+
+
+        <TextField
+          id="companyName"
           className='grouped-demo'
-          options={["", "ReactJS", "Java", "NodeJS"]} // Replace with actual tech stack options
-          value={filters.techStack}
-          onChange={(e, value) => handleFilterChange('techStack', value)}
-          renderInput={(params) => <TextField {...params} label="Tech Stack"
-            InputProps={{
-              ...params.InputProps,
-              endAdornment: !filters.techStack ? null : params.InputProps.endAdornment,
-            }}
-          />}
-        />
-        <Autocomplete
-          id="role"
-          className='grouped-demo'
-          options={["", "Frontend", "Backend", "ios"]} // Replace with actual role options
-          value={filters.role}
-          onChange={(e, value) => handleFilterChange('role', value)}
-          renderInput={(params) => <TextField {...params} label="Role"
-            InputProps={{
-              ...params.InputProps,
-              endAdornment: !filters.role ? null : params.InputProps.endAdornment,
-            }} />}
+          label="Company name"
+          type="text"
+          value={filters.companyName}
+          onChange={(e) => handleFilterChange('companyName', e.target.value)}
         />
         <TextField
           id="minBasePay"
@@ -261,14 +261,15 @@ const Home = () => {
                 maxExp={job.maxExp}
                 maxJdSalary={job.maxJdSalary}
                 minExp={job.minExp || job.maxExp} // If min experience is null, use max experience
-  minJdSalary={job.minJdSalary || job.maxJdSalary} // If min salary is null, use max salary
+                minJdSalary={job.minJdSalary || job.maxJdSalary} // If min salary is null, use max salary
 
                 salaryCurrencyCode={job.salaryCurrencyCode}
+                filters={filters}
               />
               {index === filteredJobs.length - 1 && <div ref={lastJobCardRef}></div>}
             </div>
           ))}
-          {loading && <Loader/>}
+          {loading && <Loader />}
           {!loading && !hasMore && <p>No more jobs</p>}
         </div>
       </div>

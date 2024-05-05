@@ -12,15 +12,51 @@ const JobCard = ({
     maxJdSalary,
     minExp,
     minJdSalary,
-    salaryCurrencyCode
+    salaryCurrencyCode,
+    filters
 
 }) => {
 
+    const renderSalary = () => {
+        if (minJdSalary !== null && maxJdSalary !== null) {
+          if (minJdSalary === maxJdSalary) {
+            return `${minJdSalary} ${salaryCurrencyCode}`;
+          } else {
+            return `${minJdSalary} - ${maxJdSalary} ${salaryCurrencyCode}`;
+          }
+        } else if (minJdSalary !== null) {
+          return `${minJdSalary}+ ${salaryCurrencyCode}`;
+        } else if (maxJdSalary !== null) {
+          return `${maxJdSalary} ${salaryCurrencyCode}`;
+        } else {
+          return 'Salary not provided';
+        }
+      };
+      
+      
+  const renderLocation = () => {
+    return location !== null ? location : '';
+  };
 
+  const renderJobDetails = () => {
+    return jobDetailsFromCompany ? jobDetailsFromCompany : 'Job Details not provided';
+  };
+
+  const renderExperience = () => {
+    if (minExp !== null) {
+      return `${minExp}`;
+    } else if (maxExp !== null) {
+      return `${maxExp}`;
+    } else {
+      return '0 ';
+    }
+  };
+  
+  
     return (
         <>
             <div className="job-card">
-            
+
                 <div className='job-card-head'>
                     <span>⏳ Posted 19 days ago</span>
                 </div>
@@ -30,20 +66,20 @@ const JobCard = ({
                         <div className='jcmshinhead'>
                             <h2>{companyName}</h2>
                             <p className='head-jobrole'>{jobRole}</p>
-                            <p className='head-jobloc'>{location}</p>
+                            <p className='head-jobloc'>{renderLocation()}</p>
                         </div>
 
                     </div>
                     <div className='job-card-estd'>
-                        <p>Estimated Salary: {minJdSalary} - {maxJdSalary} {salaryCurrencyCode} ✅</p>
+                        <p>Estimated Salary: {renderSalary()} ✅</p>
                     </div>
                     <div className='job-card-about-company'>
                         <label>About Company</label>
-                        <p>{jobDetailsFromCompany}</p>
+                        <p>{renderJobDetails()}</p>
                         <button className='view-job-btn'>View job</button>
                     </div>
                     <p className='job-card-exp-sal'>Minimum Experience <br />
-                        <span>{minExp} years</span>
+                        <span>{renderExperience()} years</span>
                     </p>
 
                 </div>
