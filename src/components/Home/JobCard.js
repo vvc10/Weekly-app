@@ -108,15 +108,20 @@ const JobCard = ({
                 </a>
                 <a href={jdLink} target='_blank' rel='noopener noreferrer'>
                     <button className='job-details-referral-asks'>
-                        Unlock referral asks
+                    <div className='jraskin'>
+                        <img src='' />
+                        <img src='' />
+                        <p>Unlock referral asks</p>
+                         </div>
                     </button>
+                   
                 </a>
             </div>
             {/* Modal for detailed job description */}
             {modalOpen && (
                 <div className='modal-overlay' onClick={closeModal}>
                     <div className='modal' onClick={(e) => e.stopPropagation()}>
-                        <div className='modal-head'>              
+                        <div className='modal-head'>
                             <label>Job Description</label>
                             <span className='close' onClick={closeModal}>&times;</span>
                         </div>

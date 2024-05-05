@@ -196,11 +196,29 @@
 
 /* Styles for referral asks button */
 .job-details-referral-asks {
-    font-size: 16px; /* Font size */
-    color: #ffffff; /* Text color */
     background-color: #4943da; /* Background color */
-}
 
+   
+}
+.jraskin{
+    align-items: center;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    width: fit-content;
+    margin: auto;
+    gap: 5px;
+}
+.jraskin>img{
+    background-color: #FF5733;
+    padding: .8rem;
+    border-radius: 50px;
+}
+.jraskin>p{
+    margin-left: .2rem;
+    font-size: 14px; /* Font size */
+    color: #ffffff; /* Text color */
+}
 /* Styles for modal overlay */
 .modal-overlay {
     position: fixed; /* Position */
