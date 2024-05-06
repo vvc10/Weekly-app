@@ -8,7 +8,7 @@ import NullJobs from './NullJobs.js';
 
 const Home = () => {
   const [jobs, setJobs] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [filters, setFilters] = useState({
@@ -54,22 +54,24 @@ const Home = () => {
           throw new Error('Data format is not correct');
         }
 
-        // If no data is returned or if we've reached the end of the data, set hasMore to false
         if (data.jdList.length === 0) {
           setHasMore(false);
         } else {
           setJobs(prevJobs => [...prevJobs, ...data.jdList]);
-          setLoading(false);
+          setPage(prevPage => prevPage + 1);
           setHasMore(true);
         }
       } catch (error) {
         console.error(error);
+      } finally {
         setLoading(false);
       }
     };
 
-    fetchJobs();
-  }, [page]);
+    if (hasMore && !loading) {
+      fetchJobs();
+    }
+  }, [page, hasMore, loading]);
 
   useEffect(() => {
     const options = {
@@ -88,7 +90,7 @@ const Home = () => {
       observer.current.observe(lastJobCardRef.current);
     }
 
-    return () => observer.current.disconnect(); // Cleanup observer
+    return () => observer.current.disconnect();
   }, [hasMore, loading]);
 
   const handleFilterChange = (filterName, value) => {
@@ -137,7 +139,7 @@ const Home = () => {
         <Autocomplete
           id="minExperience"
           className='grouped-demo'
-          options={["", 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
+          options={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
           value={filters.minExperience}
           onChange={(e, value) => handleFilterChange('minExperience', value)}
           renderInput={(params) => <TextField {...params} label="Min Experience"
@@ -237,15 +239,18 @@ const Home = () => {
                 salaryCurrencyCode={job.salaryCurrencyCode}
                 filters={filters}
               />
-              {/* Add reference to the last job card */}
-              {index === filteredJobs.length - 1 && <div ref={lastJobCardRef}></div>}
             </div>
           ))}
-          {/* Display no jobs component if no jobs found */}
-          {!loading && filteredJobs.length === 0 && <NullJobs />}
+          {/* Add reference to the last job card */}
+          <div ref={lastJobCardRef}></div>
           {/* Display loader while loading */}
           {loading && <Loader />}
+          {/* Display no jobs component if no jobs found */}
+          {!loading && filteredJobs.length === 0 && <NullJobs />}
+          {/* Display no more jobs message */}
         </div>
+        {!loading && !hasMore && <div className="no-more-jobs">No more jobs available</div>}
+
       </div>
     </div>
   );
