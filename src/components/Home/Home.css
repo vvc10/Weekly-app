@@ -59,7 +59,7 @@
     gap: 0;
 }
 
-.no-more-jobs{
+.no-more-jobs, .offline-msg{
     width: 100%;
     text-align: center;
     margin: 2rem 0;

@@ -22,6 +22,21 @@ const Home = () => {
   });
   const observer = useRef(); // Ref for IntersectionObserver
   const lastJobCardRef = useRef(); // Ref for last job card
+  const [isOffline, setIsOffline] = useState(!navigator.onLine); // Check if user is offline
+
+  useEffect(() => {
+    const handleOfflineStatus = () => {
+      setIsOffline(!navigator.onLine);
+    };
+
+    window.addEventListener('offline', handleOfflineStatus);
+    window.addEventListener('online', handleOfflineStatus);
+
+    return () => {
+      window.removeEventListener('offline', handleOfflineStatus);
+      window.removeEventListener('online', handleOfflineStatus);
+    };
+  }, []);
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -117,6 +132,7 @@ const Home = () => {
   };
 
   const filteredJobs = jobs.filter(job => applyFilters(job));
+
 
   return (
     <div className='home'>
@@ -246,12 +262,20 @@ const Home = () => {
           {/* Display loader while loading */}
           {loading && <Loader />}
           {/* Display no jobs component if no jobs found */}
-          {!loading && filteredJobs.length === 0 && <NullJobs />}
+
           {/* Display no more jobs message */}
         </div>
-        {!loading && !hasMore && <div className="no-more-jobs">No more jobs available</div>}
 
-      </div>
+        {!loading && !hasMore && !filteredJobs.length && (
+          <div className="no-more-jobs">No more jobs available</div>
+        )}
+        {!loading && !hasMore && filteredJobs.length === 0 && (
+          <NullJobs />
+        )}
+
+
+
+        {isOffline && <div className="offline-msg">Can't fetch Jobs, you're offline.</div>}      </div>
     </div>
   );
 };
