@@ -265,12 +265,11 @@ const Home = () => {
 
           {/* Display no more jobs message */}
         </div>
-
-        {!loading && !hasMore && !filteredJobs.length && (
-          <div className="no-more-jobs">No more jobs available</div>
-        )}
         {!loading && !hasMore && filteredJobs.length === 0 && (
           <NullJobs />
+        )}
+        {!loading && !hasMore && filteredJobs.length > 0 && (
+          <div className="no-more-jobs">No more jobs available</div>
         )}
 
 
