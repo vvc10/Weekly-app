@@ -8,7 +8,9 @@
     padding: 0; /* Remove default padding */
     margin: 0; /* Remove default margin */
 }
-
+.css-1ocvnfv{
+   margin:auto;
+}
 /* Styles for the home container */
 .home {
     display: flex; /* Flex container */
@@ -16,7 +18,9 @@
     gap: 2rem; /* Spacing between children */
     padding: 1rem 0; /* Padding */
 }
-
+.home_cont_cards{
+    padding: 0rem 0;
+}
 /* Styles for the search bar */
 .search-bar {
     margin: 2rem 2rem; /* Margin */

@@ -1,280 +1,78 @@
-import React, { useState, useEffect, useRef } from 'react';
-import Autocomplete from '@mui/material/Autocomplete';
-import TextField from '@mui/material/TextField';
-import './Home.css';
-import JobCard from './JobCard.js';
-import Loader from '../Loader.js';
-import NullJobs from './NullJobs.js';
+// Home.js
+import React, { useEffect, useState } from 'react';
+import { Box } from '@mui/system';
+import BeerCard from './Card';
+import Grid from '@mui/material/Grid';
+import Container from '@mui/material/Container';
+import Navbar from './Navbar';
+import './Home.css'
+import { Typography } from '@mui/material';
+import Loader from '../ui/Loader';
 
 const Home = () => {
-  const [jobs, setJobs] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  const [filters, setFilters] = useState({
-    minExperience: '',
-    companyName: '',
-    location: '',
-    remote: '',
-    techStack: '',
-    role: '',
-    minBasePay: ''
-  });
-  const observer = useRef(); // Ref for IntersectionObserver
-  const lastJobCardRef = useRef(); // Ref for last job card
-  const [isOffline, setIsOffline] = useState(!navigator.onLine); // Check if user is offline
+  const [beers, setBeers] = useState([]);
+  const [error, setError] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [loading, setLoading] = useState(true);
+
 
   useEffect(() => {
-    const handleOfflineStatus = () => {
-      setIsOffline(!navigator.onLine);
-    };
-
-    window.addEventListener('offline', handleOfflineStatus);
-    window.addEventListener('online', handleOfflineStatus);
-
-    return () => {
-      window.removeEventListener('offline', handleOfflineStatus);
-      window.removeEventListener('online', handleOfflineStatus);
-    };
+    fetch('https://api.sampleapis.com/beers/ale')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        setBeers(data);
+        setLoading(false);
+      })
+      .catch(error => {
+        setError(error);
+        setLoading(false);
+      });
   }, []);
 
-  useEffect(() => {
-    const fetchJobs = async () => {
-      setLoading(true);
-      const myHeaders = new Headers();
-      myHeaders.append('Content-Type', 'application/json');
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
 
-      const body = JSON.stringify({
-        limit: 8,
-        offset: (page - 1) * 8
-      });
-
-      const requestOptions = {
-        method: 'POST',
-        headers: myHeaders,
-        body
-      };
-
-      try {
-        const response = await fetch(
-          'https://api.weekday.technology/adhoc/getSampleJdJSON',
-          requestOptions
-        );
-        if (!response.ok) {
-          throw new Error('Failed to fetch data');
-        }
-        const data = await response.json();
-
-        if (!Array.isArray(data.jdList)) {
-          throw new Error('Data format is not correct');
-        }
-
-        if (data.jdList.length === 0) {
-          setHasMore(false);
-        } else {
-          setJobs(prevJobs => [...prevJobs, ...data.jdList]);
-          setPage(prevPage => prevPage + 1);
-          setHasMore(true);
-        }
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (hasMore && !loading) {
-      fetchJobs();
-    }
-  }, [page, hasMore, loading]);
-
-  useEffect(() => {
-    const options = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 1.0
-    };
-
-    observer.current = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting && hasMore && !loading) {
-        setPage(prevPage => prevPage + 1);
-      }
-    }, options);
-
-    if (lastJobCardRef.current) {
-      observer.current.observe(lastJobCardRef.current);
-    }
-
-    return () => observer.current.disconnect();
-  }, [hasMore, loading]);
-
-  const handleFilterChange = (filterName, value) => {
-    const filteredValue = value === null ? '' : value;
-
-    setFilters(prevFilters => ({
-      ...prevFilters,
-      [filterName]: filteredValue
-    }));
-  };
-
-  const applyFilters = (job) => {
-    const { minExperience, companyName, location, remote, techStack, role, minBasePay } = filters;
-
-    return (
-      (minExperience === '' || job.minExp >= minExperience) &&
-      (companyName === '' || (job.companyName && job.companyName.toLowerCase().includes(companyName.toLowerCase()))) &&
-      (location === '' || (job.location && job.location.toLowerCase().includes(location.toLowerCase()))) &&
-      ((remote === '' && !job.remote) || (job.remote && job.remote.toLowerCase() === remote.toLowerCase())) &&
-      (techStack === '' || (job.techStack && job.techStack.toLowerCase().includes(techStack.toLowerCase()))) &&
-      (role === '' || (job.jobRole && job.jobRole.toLowerCase().includes(role.toLowerCase()))) &&
-      (minBasePay === '' || job.minJdSalary >= minBasePay)
-    );
-  };
-
-  const filteredJobs = jobs.filter(job => applyFilters(job));
-
+  const filteredBeers = beers.filter((beer) =>
+    beer.name.toLowerCase().includes(searchQuery.trim().toLowerCase())
+  );
 
   return (
     <div className='home'>
-      <div className='filters search-bar'>
-        {/* Autocomplete components */}
-        {/* Autocomplete for job role */}
-        <Autocomplete
-          id="role"
-          className='grouped-demo'
-          options={["Frontend", "Backend", "ios", "Designer", "FullStack", "Flutter", "React Native", "Graphic Designer", "Design manager"]}
-          value={filters.role}
-          onChange={(e, value) => handleFilterChange('role', value)}
-          renderInput={(params) => <TextField {...params} label="Role"
-            InputProps={{
-              ...params.InputProps,
-              endAdornment: !filters.role ? null : params.InputProps.endAdornment,
-            }} />}
-        />
-        {/* Autocomplete for minimum experience */}
-        <Autocomplete
-          id="minExperience"
-          className='grouped-demo'
-          options={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
-          value={filters.minExperience}
-          onChange={(e, value) => handleFilterChange('minExperience', value)}
-          renderInput={(params) => <TextField {...params} label="Min Experience"
-            InputProps={{
-              ...params.InputProps,
-              endAdornment: !filters.minExperience ? null : params.InputProps.endAdornment,
-            }}
-          />}
-        />
-        {/* Autocomplete for tech stack */}
-        <Autocomplete
-          id="techStack"
-          className='grouped-demo'
-          options={["ReactJS", "Java", "NodeJS", "Redux", "Material UI"]}
-          value={filters.techStack}
-          onChange={(e, value) => handleFilterChange('techStack', value)}
-          renderInput={(params) => <TextField {...params} label="Tech Stack"
-            InputProps={{
-              ...params.InputProps,
-              endAdornment: !filters.techStack ? null : params.InputProps.endAdornment,
-            }}
-          />}
-        />
-        {/* Autocomplete for location */}
-        <Autocomplete
-          id="location"
-          className='grouped-demo'
-          options={["Pune", "Mumbai", "Bangalore", "Tamil Nadu", "West Bengal", "New Delhi"]}
-          value={filters.location}
-          onChange={(e, value) => handleFilterChange('location', value)}
-          renderInput={(params) => <TextField {...params} label="Location"
-            InputProps={{
-              ...params.InputProps,
-              endAdornment: !filters.location ? null : params.InputProps.endAdornment,
-            }}
-          />}
-        />
-        {/* Autocomplete for remote/on-site */}
-        <Autocomplete
-          id="remote"
-          className='grouped-demo'
-          options={["remote", "on-site"]}
-          value={filters.remote}
-          onChange={(e, value) => handleFilterChange('remote', value)}
-          renderInput={(params) => <TextField {...params} label="Remote/On-site"
-            InputProps={{
-              ...params.InputProps,
-              endAdornment: !filters.remote ? null : params.InputProps.endAdornment,
-            }}
-          />}
-        />
-        {/* Text field for company name */}
-        <TextField
-          id="companyName"
-          className='grouped-demo'
-          label="Company name"
-          type="text"
-          value={filters.companyName}
-          onChange={(e) => handleFilterChange('companyName', e.target.value)}
-        />
-        {/* Autocomplete for minimum base pay */}
-        <Autocomplete
-          id="minBasePay"
-          className='grouped-demo'
-          options={[0, 100, 200, 300, 400]}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Min Base Pay"
-              InputProps={{
-                ...params.InputProps,
-                endAdornment: !filters.remote ? null : params.InputProps.endAdornment,
-              }}
-            />
-          )}
-          value={filters.minBasePay}
-          onChange={(e, value) => handleFilterChange('minBasePay', value)}
-        />
+    <div className='home_navbar'>
+      <Navbar onSearch={setSearchQuery} />
+    </div>
+      <div className='home_cont_cards'>
+      <Container>
+      <Box 
+  sx={{ 
+    display: loading ? 'block' : 'grid',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', 
+    gap: 2,
+    padding: 2,
+    mt: 8,  // To offset the AppBar
+    justifyContent: 'center',
+  }}>
+        {loading ? (
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
+            <Loader />
+            <Typography variant="h6" sx={{ ml: 2 }}>Loading...</Typography>
+          </Box>
+        ) : (
+          filteredBeers.map((beer) => (
+            <BeerCard key={beer.id} beer={beer} />
+          ))
+        )}
+      </Box> 
+      </Container>
+     
+
       </div>
-      <div className='jobs_sec'>
-        <h1>Jobs:</h1>
-        <div className="job-list">
-          {/* Display job cards */}
-          {filteredJobs.map((job, index) => (
-            <div key={index}>
-              <JobCard
-                companyName={job.companyName}
-                jdLink={job.jdLink}
-                jobDetailsFromCompany={job.jobDetailsFromCompany}
-                jobRole={job.jobRole}
-                location={job.location}
-                logoUrl={job.logoUrl}
-                maxExp={job.maxExp}
-                maxJdSalary={job.maxJdSalary}
-                minExp={job.minExp || job.maxExp}
-                minJdSalary={job.minJdSalary || job.maxJdSalary}
-                salaryCurrencyCode={job.salaryCurrencyCode}
-                filters={filters}
-              />
-            </div>
-          ))}
-          {/* Add reference to the last job card */}
-          <div ref={lastJobCardRef}></div>
-          {/* Display loader while loading */}
-          {loading && <Loader />}
-          {/* Display no jobs component if no jobs found */}
-
-          {/* Display no more jobs message */}
-        </div>
-        {!loading && !hasMore && filteredJobs.length === 0 && (
-          <NullJobs />
-        )}
-        {!loading && !hasMore && filteredJobs.length > 0 && (
-          <div className="no-more-jobs">No more jobs available</div>
-        )}
-
-
-
-        {isOffline && <div className="offline-msg">Can't fetch Jobs, you're offline.</div>}      </div>
     </div>
   );
 };
