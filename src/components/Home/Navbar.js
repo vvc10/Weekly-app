@@ -19,7 +19,7 @@ export default function Navbar({ onSearch }) {
       };
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="fixed" sx={{ backgroundColor: 'hsl(0deg 0% 89.92% / 85%)' }} elevation={0}>
+      <AppBar position="fixed" sx={{ backgroundColor: '#f4f4f4', borderBottom:'.5px solid hsl(0deg 0% 89.92% / 85%)' }} elevation={0}>
         <Toolbar>
           <IconButton
             size="large"
